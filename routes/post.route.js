@@ -53,6 +53,21 @@ router.route("/like/:postId")
   })
 })
 
+router.route("/unlike/:postId")
+.post(authVerify, async(req, res)=>{
+  const {postId} = req.params
+  const {userId} = req.user
+  const post = await Posts.findById(postId)
+
+  post.likes.pull(userId)
+  post.save()
+  console.log(post)
+  res.status(200).json({
+    message:"Post Unliked",
+    postId
+  })
+})
+
 router.route("/comment/:postId")
 .post(authVerify, async(req, res)=>{
   const postId = req.params;
